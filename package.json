@@ -1,0 +1,38 @@
+{
+  "name": "@cicciosgamino/web-socket",
+  "version": "1.0.0",
+  "description": "Simple web-socket debug customElement",
+  "main": "web-socket.js",
+  "type": "module",
+  "module": "web-socket.js",
+  "scripts": {
+    "dev": "",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CICCIOSGAMINO/web-socket.git"
+  },
+  "keywords": [
+    "WebSocket",
+    "WebComponent",
+    "CustomElement",
+    "Lit"
+  ],
+  "author": "@cicciosgamino",
+  "license": "GPL-3.0",
+  "private": false,
+  "bugs": {
+    "url": "https://github.com/CICCIOSGAMINO/web-socket/issues"
+  },
+  "homepage": "https://github.com/CICCIOSGAMINO/web-socket#readme",
+  "dependencies": {
+    "lit": "*"
+  },
+  "devDependencies": {
+    "vite": "^2.3.7"
+  },
+  "directories": {
+    "example": "examples"
+  }
+}
