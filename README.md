@@ -102,16 +102,14 @@ Import the component's JavaScript module, use the component in your HTML, and co
 ```
 
 ### 🚀 Serve
-Server the content in developer and compiled mode with Vite.
-
+Serve your HTML with any server or build process that supports bare module specifier resolution (see next section):
 ```bash
-# isntall dependencies
-npm install
+# use globally instelled
+npm install -g @web/dev-server
 
-# dev, build, preview
-npm run dev
-npm run build
-npm run preview
+# install the project dev-dependencies and npm run
+npm install
+npm run serve
 ```
 
 ## Contributing

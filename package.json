@@ -6,7 +6,7 @@
   "type": "module",
   "module": "web-socket.js",
   "scripts": {
-    "dev": "",
+    "serve": "web-dev-server --node-resolve --app-index examples/index.html --watch --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,7 +30,7 @@
     "lit": "*"
   },
   "devDependencies": {
-    "vite": "^2.3.7"
+    "@web/dev-server": "^0.1.18"
   },
   "directories": {
     "example": "examples"
