@@ -51,7 +51,10 @@ npm install --save @cicciosgamino/web-socket
 
 | Name | Type | Default | Description
 | ------------- | ------------- | ------------ | --------------
-| title    | String | `''` | Brief string to place inside the progress ring component space
+| url       | String | `''` | WebSocket Server URL
+| protocols | String | `[]` | WebSocket Supported protocols
+| wsStatus  | String | `Not Connected` | WebSocket connection status
+
 
 ### Methods
 *None*
@@ -63,7 +66,7 @@ npm install --save @cicciosgamino/web-socket
 
 | Name | Default | Description
 | -------------------------- | ----------- | --------------------
-| `--progress-from-bottom`   |    `10%`    | Absolute positioning the progress number from bottom
+| `--`   |    ``    | TODO
 
 ### 🤖 Write HTML and JavaScript
 Import the component's JavaScript module, use the component in your HTML, and control it with JavaScript, just like you would with a built-in element such as `<button>`:
