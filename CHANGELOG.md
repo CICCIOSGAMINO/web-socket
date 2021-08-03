@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.0] - 02-08-2021
+### Added
+  - noui attribute - No User interface
+  - auto attribute - Automatic connection every 10s
+
+### Changed
+  - New User Interface
+
 ## [1.0.0] - 07-07-2021
 ### Added
   - Init the Element  [@cicciosgamino](https://github.com/CICCIOSGAMINO).

@@ -4,7 +4,7 @@
 
 # 🍔 \<web-socket\>
 
-Simple debug WebSocket CustomElement 🍔!
+Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (noui attribute) and in auto connection mode or with the connect and disconnect button.
 
 <p align="center">
   <a href="#examples">examples</a> •
@@ -16,9 +16,21 @@ Simple debug WebSocket CustomElement 🍔!
 
 ## Examples
 
+![Example web-socket component](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/example_websocket.gif)
+
 ```html
-<web-socket></web-socket>
+<web-socket url="ws://127.0.0.1:8888"></web-socket>
 ```
+
+```html
+<!-- With auto connection (10sec) -->
+<web-socket url="ws://127.0.0.1:8888" auto></web-socket>
+
+<!-- With auto connection and no User Interface -->
+<web-socket url="ws://127.0.0.1:8888" auto noui></web-socket>
+```
+
+![Example web-socket component](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/example_websocket_send.gif)
 
 ## 🚀 Usage
 
@@ -42,7 +54,7 @@ npm install --save @cicciosgamino/web-socket
 
 3. Place in your HTML
 ```html
-<web-socket url=""></web-socket>
+<web-socket url="ws://127.0.0.1:8888"></web-socket>
 ```
 
 ## 🐝 API
@@ -54,6 +66,10 @@ npm install --save @cicciosgamino/web-socket
 | url       | String | `''` | WebSocket Server URL
 | protocols | String | `[]` | WebSocket Supported protocols
 | wsStatus  | String | `Not Connected` | WebSocket connection status
+| noui  | Boolean | `not present` | Attribute to set the no UI mode
+| auto  | Boolean | `not present` | Attribute to set the auto connection mode
+| error | String | `''` | Last error tracked from the component
+| message | String | `''` | Last message received
 
 
 ### Methods
@@ -65,8 +81,8 @@ npm install --save @cicciosgamino/web-socket
 ### 🧁 CSS Custom Properties
 
 | Name | Default | Description
-| -------------------------- | ----------- | --------------------
-| `--`   |    ``    | TODO
+| --------------- | ------- | -----------------------------
+| `--ws-svg-size` |  `33px` | Button and SVG width & height
 
 ### 🤖 Write HTML and JavaScript
 Import the component's JavaScript module, use the component in your HTML, and control it with JavaScript, just like you would with a built-in element such as `<button>`:

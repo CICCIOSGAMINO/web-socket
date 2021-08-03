@@ -20,17 +20,31 @@
 
   <style>
 
-    html {
+    * {
+      /* reset browser defaults */
+      box-sizing: border-box;
       margin: 0;
-      /* base rem unit (10px) */
-      font-size: 62.5%;
+      padding: 0;
     }
 
-    body  {
-      margin: 0;
-      padding: 2rem;
+    html {
+      /* base rem unit (10px) */
+      font-size: 62.5%;
+      block-size: 100%;
+
+      background-color: var(--surface1);
+      color: var(--text1);
+    }
+
+    body {
+      padding: 3rem;
+      
+      font-family: system-ui, sans-serif;
       font-size: 2rem;
-      text-align: center;
+
+      display: grid;
+      place-content: center;
+      gap: 5rem;
     }
   </style>
   
@@ -38,7 +52,14 @@
 
 <body>
 
+  <!-- Base Example -->
   <web-socket url="ws://127.0.0.1:8888"></web-socket>
+
+  <!-- With auto connection (10sec)
+  <web-socket url="ws://127.0.0.1:8888" auto></web-socket> -->
+
+  <!-- With auto connection and no User Interface
+  <web-socket url="ws://127.0.0.1:8888" auto noui></web-socket> -->
 
   <noscript>
     Please enable JavaScript to view this website.
