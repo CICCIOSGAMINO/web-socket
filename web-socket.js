@@ -11,7 +11,7 @@ class WebSocket extends LitElement {
   static get styles () {
     return css`
       * {
-        /* --ws-svg-size: 33px; */
+        --ws-svg-size: 33px;
       }
       :host {
         display: block;
@@ -43,6 +43,18 @@ class WebSocket extends LitElement {
       button:disabled svg {
         fill: whitesmoke;
       }
+      button:hover {
+        border: 4px solid #888;
+      }
+      button:hover svg {
+        fill: #888;
+      }
+      button:hover:disabled {
+        border: 2px solid #333;
+      }
+      button:hover:disabled svg {
+        fill: whitesmoke;
+      }
       .container {
         width: 600px;
         min-width: 200px;
@@ -63,12 +75,21 @@ class WebSocket extends LitElement {
       noui: Boolean,
       error: String,
       wsStatus: String,
-      auto: Boolean
+      auto: {
+        type: Boolean,
+        reflect: true,
+        converter: {
+          toAttribute: (value, type) => {
+            return ''
+          }
+        }
+      }
     }
   }
 
   constructor () {
     super()
+    this.error = ''
     this.wsStatus = 'Not Connected'
     this.noui = false
     this.auto = false
@@ -100,13 +121,9 @@ class WebSocket extends LitElement {
             this.#createWebSocket()
           }
         }, 10000)
+      } else {
+        this.#stopLoop()
       }
-    }
-    // listent for no auto attribute
-    if (!this.hasAttribute('auto')) {
-      clearInterval(this.#autoTiming)
-    } else {
-      this.auto = true
     }
     // listening for no user interface noui
     if (this.hasAttribute('noui')) {
@@ -116,20 +133,22 @@ class WebSocket extends LitElement {
 
   // Create new webSocket connection
   #createWebSocket () {
-    if (this.#ws && this.#ws.readyState === OPEN) {
-      console.log('@WS >> ACTIVE')
+    // TODO if (this.#ws && this.#ws.readyState === OPEN) {
+    if (this.#ws) {
+      // console.log('@WS >> LIVE')
       return
     }
     try {
       this.#ws = new window.WebSocket(this.url, this.protocols)
+      // console.log(`@WS >> CREATED`)
       // bind WebSocket events to component events
       this.#ws.addEventListener('open', this.#onOpen.bind(this))
       this.#ws.addEventListener('close', this.#onClose.bind(this))
       this.#ws.addEventListener('message', this.#onMessage.bind(this))
       this.#ws.addEventListener('error', this.#onError.bind(this))
     } catch (err) {
-      console.log(err)
       this.error = err
+      console.log(err)
     }
   }
 
@@ -142,17 +161,16 @@ class WebSocket extends LitElement {
     console.log('@WS >> Close')
     this.#closeWs()
     this.#helperStatus()
-    this.message = ''
+    this.message = `Connection to ${this.url} CLOSED.`
   }
 
   #onMessage (event) {
-    console.log(event.data)
+    this.error = ''
     this.message = event.data
   }
 
   #onError (event) {
-    console.log(event.data)
-    this.error = event.data
+    this.error = `Connection to ${this.url} FAILED`
     this.#helperStatus()
   }
 
@@ -196,8 +214,11 @@ class WebSocket extends LitElement {
   }
 
   #toggleAuto () {
-    // if (this.classList.contains('auto')) {}
     this.auto = !this.auto
+  }
+
+  #stopLoop () {
+    clearInterval(this.#autoTiming)
   }
 
   uiTemplate () {
