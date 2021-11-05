@@ -73,9 +73,10 @@ class WebSocket extends LitElement {
         margin-top: 2rem;
         margin-bottom: 5rem;
 
-        max-width: 600px;
         min-width: 200px;
-        height: 220px;
+        max-width: 600px;
+
+        height: 35vh;
 
         font-size: 1.3rem;
         text-align: left;
@@ -120,7 +121,7 @@ class WebSocket extends LitElement {
       }
 
       .error {
-        min-height: 3rem;
+        min-height: 2.7rem;
         color: red;
       }
     `

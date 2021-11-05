@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.1.0] - 05-11-2021
+### Changed
+  - Responsive screen height CSS property to do not grow bigger than screen
+
 ## [3.0.0] - 05-11-2021
 ### Changed
   - attribute noui become ui
