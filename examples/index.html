@@ -52,14 +52,17 @@
 
 <body>
 
-  <!-- Base Example
-  <web-socket url="ws://127.0.0.1:8888"></web-socket> -->
+  <!-- Base Example -->
+  <!-- <web-socket url="ws://127.0.0.1:8888" ui></web-socket> -->
 
   <!-- With auto connection (10sec) -->
-  <web-socket url="ws://127.0.0.1:8888" auto></web-socket>
+  <!-- <web-socket url="ws://127.0.0.1:8888" ui="false" auto></web-socket> -->
 
   <!-- With auto connection and no User Interface
-  <web-socket url="ws://127.0.0.1:8888" auto noui></web-socket> -->
+  <web-socket url="ws://127.0.0.1:8888" auto ui="true"></web-socket> -->
+
+  <!-- Use the messages received from web-socket -->
+  <app-shell></app-shell>
 
   <noscript>
     Please enable JavaScript to view this website.
@@ -67,6 +70,7 @@
 
   <!-- Import Js Module -->
   <script type="module" src="../web-socket.js"></script>
+  <script type="module" src="./app-shell.js"></script>
 
 </body>
 </html>

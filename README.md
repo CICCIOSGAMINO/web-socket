@@ -4,7 +4,9 @@
 
 # 🍔 \<web-socket\>
 
-Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (noui attribute) and in auto connection mode or with the connect and disconnect button.
+Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (noui=true), you can connect and disconnect from your WebSocket server or set auto attribute to set infinite connection loop.
+
+The UI is trigger based on WebSocket object, when the WebSocket is created the UI is active, close the WebSocket to unactive the UI (Connect WebScket, Autoconnect and send Button). The Close button set the WebSocket object to null.
 
 <p align="center">
   <a href="#examples">examples</a> •
@@ -16,21 +18,19 @@ Simple debug WebSocket CustomElement 🍔! The component can be used with a simp
 
 ## Examples
 
-![Example web-socket component](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/example_websocket.gif)
+![Example web-socket component](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/exampleWebSocket.gif)
 
 ```html
-<web-socket url="ws://127.0.0.1:8888"></web-socket>
+<web-socket url="ws://127.0.0.1:8888" ui></web-socket>
 ```
 
 ```html
 <!-- With auto connection (10sec) -->
-<web-socket url="ws://127.0.0.1:8888" auto></web-socket>
+<web-socket url="ws://127.0.0.1:8888" ui auto></web-socket>
 
 <!-- With auto connection and no User Interface -->
-<web-socket url="ws://127.0.0.1:8888" auto noui></web-socket>
+<web-socket url="ws://127.0.0.1:8888" auto></web-socket>
 ```
-
-![Example web-socket component](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/example_websocket_send.gif)
 
 ## 🚀 Usage
 
@@ -54,7 +54,36 @@ npm install --save @cicciosgamino/web-socket
 
 3. Place in your HTML
 ```html
-<web-socket url="ws://127.0.0.1:8888"></web-socket>
+<web-socket url="ws://127.0.0.1:8888" ui></web-socket>
+```
+
+4. Use the component with LitElement
+```javascript
+
+  _handleMsg (event) {
+    // event.details.message
+  }
+
+  _handleStatus (event) {
+    // event.details.message
+  }
+
+  _handleError (event) {
+    // event.details.message
+  }
+
+  render () {
+    return html`
+      <web-socket 
+        url="ws://127.0.0.1:8888" 
+        ui
+        @ws-message=${this._handleMsg}
+        @ws-status=${this._handleStatus}
+        @ws-error=${this._handleError}>
+      </web-socket>
+    `
+  }
+}
 ```
 
 ## 🐝 API
@@ -65,24 +94,30 @@ npm install --save @cicciosgamino/web-socket
 | ------------- | ------------- | ------------ | --------------
 | url       | String | `''` | WebSocket Server URL
 | protocols | String | `[]` | WebSocket Supported protocols
-| wsStatus  | String | `Not Connected` | WebSocket connection status
-| noui  | Boolean | `not present` | Attribute to set the no UI mode
-| auto  | Boolean | `not present` | Attribute to set the auto connection mode
-| error | String | `''` | Last error tracked from the component
-| message | String | `''` | Last message received
-
+| ui    | Boolean | `` | If Attribute defined is show easy UI
+| auto  | Boolean | `` | Attribute to set the auto connection mode
 
 ### Methods
-*None*
+
+| Name         | Description
+| ------------ | -------------
+| `connect() => void`    | Create WebSocket to url, protocols specified as attributes
+| `disconnect() => void` | Close the WebSocket
+| `sendMsg(msg) => void` | Send message down to websocket
 
 ### Events
-*None*
+
+|  Name Name  |  Target  |   Detail   |   Description   
+| ----------- | -------- | ---------- | -----------------------------------------
+|  `ws-message`  |  `web-socket` | { detail: { message: ''} | Fired when a message is received
+|  `ws-error`    |  `web-socket` | { detail: { message: ''} | Fired when a Error is received
+|  `ws-status`   | `web-socket`  | { detail: { message: ''} | Fired when the connection status changes
 
 ### 🧁 CSS Custom Properties
 
 | Name | Default | Description
 | --------------- | ------- | -----------------------------
-| `--ws-svg-size` |  `33px` | Button and SVG width & height
+| `--ws-svg-size` |  `24px` | Button and SVG width & height
 
 ### 🤖 Write HTML and JavaScript
 Import the component's JavaScript module, use the component in your HTML, and control it with JavaScript, just like you would with a built-in element such as `<button>`:
@@ -100,7 +135,7 @@ Import the component's JavaScript module, use the component in your HTML, and co
   </head>
   <body>
     <!-- Use Web Components in your HTML like regular built-in elements. -->
-    <web-socket url=""></web-socket>
+    <web-socket url="ws://127.0.0.1:8888" ui auto></web-socket>
 
     <!-- The Material Web Components use standard JavaScript modules. -->
     <script type="module">
@@ -136,42 +171,9 @@ npm run serve
 Got **something interesting** you'd like to **share**? Learn about [contributing](https://github.com/CICCIOSGAMINO/init/blob/master/CONTRIBUTING.md).
 
 # Accessibility
-TODO
 
-# 🔧 TODO 
+# 🔧 TODO
 - [ ] Basic Unit testing
-
-## CSS encapsulation
-The elements HTML structure is initialized in a [Shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM), so it is impossible to apply CSS to it. If you need to change the element's default style for any reason, you should open up a new issue (or a pull request!), describing your use case, and we'll work with you on solving the problem.
-
-## Browser support
-
-Browsers without native [custom element support][support] require a [polyfill][]. Legacy browsers require various other polyfills. See [`examples/index.html`][example] for details.
-
-- Chrome
-- Firefox
-- Safari
-- Microsoft Edge
-
-[support]: https://caniuse.com/#feat=custom-elementsv1
-[polyfill]: https://github.com/webcomponents/custom-elements
-
-
-## Author
-
-| [![@cicciosgamino](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/justme%40412x412_round.png)](https://linkedin.com/in/) 	|
-|:------------------------------------------------------------------------------------------:	|
-|                                    **@cicciosgamino**                                      	|
-
-## Support
-Reach out to me at one of the following places:
-
-- [Github](https://github.com/CICCIOSGAMINO)
-- [Twitter](https://twitter.com/cicciosgamino)
-
-## Donate
-
-Donate help and contibutions!
 
 # License
 [GNU General Public License v3.0](https://github.com/CICCIOSGAMINO/init/blob/master/LICENSE)

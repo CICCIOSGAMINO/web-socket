@@ -1,12 +1,12 @@
 {
   "name": "@cicciosgamino/web-socket",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "Simple web-socket debug customElement",
   "main": "web-socket.js",
   "type": "module",
   "module": "web-socket.js",
   "scripts": {
-    "serve": "web-dev-server --node-resolve --app-index examples/index.html --watch --open",
+    "dev": "web-dev-server --node-resolve --app-index examples/index.html --watch --open",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
