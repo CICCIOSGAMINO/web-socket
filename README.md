@@ -116,8 +116,12 @@ npm install --save @cicciosgamino/web-socket
 ### 🧁 CSS Custom Properties
 
 | Name | Default | Description
-| --------------- | ------- | -----------------------------
+| --------------- | ------- | --------------------------------
 | `--ws-svg-size` |  `24px` | Button and SVG width & height
+| `--text1`       |  `#333` | Base text button, border color
+| `--text2`       |  `#888`     | Hover color
+| `--surface1`    |  `whitesmoke`     | Background 1
+| `--surface2`    |  `purple`     | Background 2
 
 ### 🤖 Write HTML and JavaScript
 Import the component's JavaScript module, use the component in your HTML, and control it with JavaScript, just like you would with a built-in element such as `<button>`:

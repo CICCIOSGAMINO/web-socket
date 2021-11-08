@@ -46,6 +46,7 @@ class WebSocket extends LitElement {
       button svg {
         width: var(--ws-svg-size, 24px);
         height: var(--ws-svg-size, 24px);
+        fill: var(--text1, #333);
       }
 
       button:disabled {
@@ -75,7 +76,6 @@ class WebSocket extends LitElement {
       }
 
       button:active {
-        /* TODO */
         background-color: var(--surface2, purple);
       }
 
