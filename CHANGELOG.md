@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.2.0] - 05-11-2021
+### Changed
+  - Better responsive
+  - Minor Fix
+
+### Add
+  - Color scheme light / dark compatible with custom var
+  - Clean input box when message sent
+  - button:active style for sent button
+
 ## [3.1.0] - 05-11-2021
 ### Changed
   - Responsive screen height CSS property to do not grow bigger than screen

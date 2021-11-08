@@ -1,6 +1,6 @@
 {
   "name": "@cicciosgamino/web-socket",
-  "version": "3.1.0",
+  "version": "3.2.0",
   "description": "Simple web-socket debug customElement",
   "main": "web-socket.js",
   "type": "module",

@@ -10,7 +10,12 @@ class WebSocket extends LitElement {
   static get styles () {
     return css`
       * {
-        /* --ws-svg-size: 24px; */
+        /* --ws-svg-size: 24px;
+          --text1:
+          --text2:
+          --surface1:
+          --surface2:
+          */
       }
 
       :host {
@@ -20,7 +25,7 @@ class WebSocket extends LitElement {
 
       p {
         /* font-size: 1.7rem; */
-        color: #333;
+        color: var(--text1, #333);
       }
 
       button {
@@ -31,7 +36,7 @@ class WebSocket extends LitElement {
         min-width: calc(var(--ws-svg-size, 24px) * 2);
         min-height: calc(var(--ws-svg-size, 24px) * 2);
 
-        border: 2px solid#333;
+        border: 2px solid var(--text1, #333);
         border-radius: 50%;
         background-color: transparent;
 
@@ -44,29 +49,34 @@ class WebSocket extends LitElement {
       }
 
       button:disabled {
-        background-color: #333;
+        background-color: var(--text1, #333);
         cursor: none;
         cursor: not-allowed;
       }
 
       button:disabled svg {
-        fill: whitesmoke;
+        fill: var(--surface1, whitesmoke);
       }
 
       button:hover {
-        border: 4px solid #888;
+        border: 4px solid var(--text2, #888);
       }
 
       button:hover svg {
-        fill: #888;
+        fill: var(--text2, #888);
       }
 
       button:hover:disabled {
-        border: 2px solid #333;
+        border: 2px solid var(--text1, #333);
       }
 
       button:hover:disabled svg {
-        fill: whitesmoke;
+        fill: var(--surface1, whitesmoke);
+      }
+
+      button:active {
+        /* TODO */
+        background-color: var(--surface2, purple);
       }
 
       .container {
@@ -76,7 +86,7 @@ class WebSocket extends LitElement {
         min-width: 200px;
         max-width: 600px;
 
-        height: 35vh;
+        height: 25vh;
 
         font-size: 1.3rem;
         text-align: left;
@@ -94,7 +104,7 @@ class WebSocket extends LitElement {
         min-height: calc(var(--ws-svg-size, 24px) * 2.4);
 
         border: none;
-        border-bottom: 2px solid #333;
+        border-bottom: 2px solid var(--text1, #333);
       }
 
       label[for="message"] {
@@ -257,6 +267,8 @@ class WebSocket extends LitElement {
     if (this.ws && this.ws.readyState === OPEN) {
       // console.log(`@WS SEND >> ${msg}`)
       this.ws.send(msg)
+      // clean the input box
+      this.renderRoot.querySelector('#message').value = ''
     }
   }
 

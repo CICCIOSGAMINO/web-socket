@@ -10,6 +10,12 @@ class AppShell extends LitElement {
 
       web-socket {
         --ws-svg-size: 31px;
+        /*
+        --text1: 
+        --text2:
+        --surface1:
+        --surface2:
+        */
       }
     `
   }
