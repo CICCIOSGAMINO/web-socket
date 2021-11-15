@@ -9,13 +9,16 @@ class AppShell extends LitElement {
       }
 
       web-socket {
-        --ws-svg-size: 31px;
+        --ws-svg-size: 21px;
+        --text-size: 1.7rem;
         /*
         --text1: 
         --text2:
         --surface1:
         --surface2:
         */
+
+        height: 90vh;
       }
     `
   }

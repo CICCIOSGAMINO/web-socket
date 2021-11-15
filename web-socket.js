@@ -10,7 +10,9 @@ class WebSocket extends LitElement {
   static get styles () {
     return css`
       * {
-        /* --ws-svg-size: 24px;
+        /*
+          --text-size: 1.7rem;
+          --ws-svg-size: 24px;
           --text1:
           --text2:
           --surface1:
@@ -19,8 +21,12 @@ class WebSocket extends LitElement {
       }
 
       :host {
-        display: block;
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1rem;
+        font-size: var(--text-size, 1.7rem);
       }
 
       p {
@@ -30,8 +36,7 @@ class WebSocket extends LitElement {
 
       button {
         display: inline-block;
-        margin: .1rem;
-        padding: 0;
+        line-height: calc(var(--ws-svg-size, 24px) * 0.5);
 
         min-width: calc(var(--ws-svg-size, 24px) * 2);
         min-height: calc(var(--ws-svg-size, 24px) * 2);
@@ -59,14 +64,6 @@ class WebSocket extends LitElement {
         fill: var(--surface1, whitesmoke);
       }
 
-      button:hover {
-        border: 4px solid var(--text2, #888);
-      }
-
-      button:hover svg {
-        fill: var(--text2, #888);
-      }
-
       button:hover:disabled {
         border: 2px solid var(--text1, #333);
       }
@@ -80,15 +77,12 @@ class WebSocket extends LitElement {
       }
 
       .container {
-        margin-top: 2rem;
-        margin-bottom: 5rem;
+        min-width: 100%;
+        max-width: 500px;
+        flex-grow: 3;
+        align-self: flex-start;
 
-        min-width: 200px;
-        max-width: 600px;
-
-        height: 25vh;
-
-        font-size: 1.3rem;
+        font-size: calc(var(--text-size, 1.7rem) * 0.8);
         text-align: left;
         overflow: auto;
       }
@@ -112,7 +106,7 @@ class WebSocket extends LitElement {
       }
 
       #message {
-        font-size: 1.7rem;
+        font-size: var(--text-size, 1.7rem);
       }
 
       #sent-btn {
@@ -131,7 +125,7 @@ class WebSocket extends LitElement {
       }
 
       .error {
-        min-height: 2.7rem;
+        min-height: 2.3rem;
         color: red;
       }
     `
@@ -148,9 +142,6 @@ class WebSocket extends LitElement {
         type: Boolean,
         reflect: true
       },
-      wsConnected: {
-        type: Boolean
-      },
       wsStatus: String,
       error: String
     }
@@ -159,7 +150,6 @@ class WebSocket extends LitElement {
   constructor () {
     super()
     this.error = ''
-    this.wsConnected = false
     this.wsStatus = 'Not Connected'
   }
 
@@ -316,6 +306,10 @@ class WebSocket extends LitElement {
   }
 
   _clean () {
+    this.error = ''
+    this.wsStatus = ''
+    this.ws = null
+
     this.renderRoot.querySelector('#message')
       .value = ''
     this.renderRoot.querySelector('#logs')
@@ -323,54 +317,56 @@ class WebSocket extends LitElement {
   }
 
   _uiTemplate () {
-    return html`
-      <!-- <p>ws: ${this.ws}</p> -->
-      <div class="content">
-        <p>${this.wsStatus} to ${this.url} </p>
-        <!-- Open the ws connection -->
-        <button
-          title="Connect WebSocket"
-          ?disabled=${this.ws}
-          @click=${this.openWs}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/>
-          </svg>
-        </button>
-        <!-- Close the ws connection -->
-        <button
-          title="Close WebSocket"
-          ?disabled=${!this.ws}
-          @click=${this.disconnect}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0V0z" fill="none"/>
-            <path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
-          </svg>
-        </button>
-        <!-- Autoconnection mode -->
-        <button
-          title="Autoconnect"
-          ?disabled=${this.auto}
-          @click=${this._toggleAuto}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path d="M0 0h24v24H0V0z" fill="none"/>
-            <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
-          </svg>
-        </button>
-        <!-- Clean -->
-        <button
-          title="Clean"
-          @click=${this._clean}>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <rect fill="none" height="24" width="24"/>
-            <path d="M7.06,8.94L5,8l2.06-0.94L8,5l0.94,2.06L11,8L8.94,8.94L8,11L7.06,8.94z M8,21l0.94-2.06L11,18l-2.06-0.94L8,15l-0.94,2.06 L5,18l2.06,0.94L8,21z M4.37,12.37L3,13l1.37,0.63L5,15l0.63-1.37L7,13l-1.37-0.63L5,11L4.37,12.37z M12,12c0-3.09,1.38-5.94,3.44-8 L12,4V2h7v7h-2l0-3.72c-1.8,1.74-3,4.2-3,6.72c0,3.32,2.1,6.36,5,7.82L19,22C14.91,20.41,12,16.35,12,12z"/>
-          </svg>
-        </button>
+    return html`  
+        <p>${this.wsStatus} ${this.url} </p>
+
+        <div class="buttons">
+          <!-- Open the ws connection -->
+          <button
+            title="Connect WebSocket"
+            ?disabled=${this.ws}
+            @click=${this.openWs}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/>
+            </svg>
+          </button>
+          <!-- Close the ws connection -->
+          <button
+            title="Close WebSocket"
+            ?disabled=${!this.ws}
+            @click=${this.disconnect}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0V0z" fill="none"/>
+              <path d="M14.59 8L12 10.59 9.41 8 8 9.41 10.59 12 8 14.59 9.41 16 12 13.41 14.59 16 16 14.59 13.41 12 16 9.41 14.59 8zM12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+            </svg>
+          </button>
+          <!-- Autoconnection mode -->
+          <button
+            title="Autoconnect"
+            ?disabled=${this.auto}
+            @click=${this._toggleAuto}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0V0z" fill="none"/>
+              <path d="M12 6v3l4-4-4-4v3c-4.42 0-8 3.58-8 8 0 1.57.46 3.03 1.24 4.26L6.7 14.8c-.45-.83-.7-1.79-.7-2.8 0-3.31 2.69-6 6-6zm6.76 1.74L17.3 9.2c.44.84.7 1.79.7 2.8 0 3.31-2.69 6-6 6v-3l-4 4 4 4v-3c4.42 0 8-3.58 8-8 0-1.57-.46-3.03-1.24-4.26z"/>
+            </svg>
+          </button>
+          <!-- Clean -->
+          <button
+            title="Clean"
+            @click=${this._clean}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <rect fill="none" height="24" width="24"/>
+              <path d="M7.06,8.94L5,8l2.06-0.94L8,5l0.94,2.06L11,8L8.94,8.94L8,11L7.06,8.94z M8,21l0.94-2.06L11,18l-2.06-0.94L8,15l-0.94,2.06 L5,18l2.06,0.94L8,21z M4.37,12.37L3,13l1.37,0.63L5,15l0.63-1.37L7,13l-1.37-0.63L5,11L4.37,12.37z M12,12c0-3.09,1.38-5.94,3.44-8 L12,4V2h7v7h-2l0-3.72c-1.8,1.74-3,4.2-3,6.72c0,3.32,2.1,6.36,5,7.82L19,22C14.91,20.41,12,16.35,12,12z"/>
+            </svg>
+          </button>
+        </div>
+
         <!-- Msg contanitor -->
         <div class="container">
+          <p class="error">${this.error}</p> 
           <ul id="logs">
           </ul>
         </div>
-        <p class="error">${this.error}</p> 
 
         <div class="input-container">
           <label for="message">
