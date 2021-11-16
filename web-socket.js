@@ -84,7 +84,14 @@ class WebSocket extends LitElement {
 
         font-size: calc(var(--text-size, 1.7rem) * 0.8);
         text-align: left;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+      }
+
+      .container p {
+        text-overflow: ellipsis;
+        /* overflow: hidden; */
+        white-space: nowrap;
       }
 
       .input-container {
@@ -125,6 +132,7 @@ class WebSocket extends LitElement {
       }
 
       .error {
+        text-align: center;
         min-height: 2.3rem;
         color: red;
       }

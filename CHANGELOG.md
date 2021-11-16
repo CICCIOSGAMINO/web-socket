@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [3.3.1] - 16-11-2021
+### Changed
+  - CSS overflow property of message content
+
 ## [3.3.0] - 15-11-2021
 ### Changed
   - More flexibility on height size of all widget
