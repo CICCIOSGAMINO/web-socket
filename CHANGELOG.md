@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.0.0] - 02-12-2021
+### Changed
+	- New responsive layout based on grid
+	- Fix message box vertical scroll
+	- Clear button only clean error / messages box
+
+### Add
+	- JSON prettify checkbox
+
 ## [3.3.1] - 16-11-2021
 ### Changed
   - CSS overflow property of message content

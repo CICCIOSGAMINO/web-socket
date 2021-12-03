@@ -1,6 +1,6 @@
 {
   "name": "@cicciosgamino/web-socket",
-  "version": "3.3.1",
+  "version": "3.4.0",
   "description": "Simple web-socket debug customElement",
   "main": "web-socket.js",
   "type": "module",
@@ -30,7 +30,7 @@
     "lit": "*"
   },
   "devDependencies": {
-    "@web/dev-server": "^0.1.18"
+    "@web/dev-server": "^0.1.28"
   },
   "directories": {
     "example": "examples"

@@ -1,14 +1,16 @@
 import { LitElement, html, css } from 'lit'
 
-// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
-const CONNECTING = 0
-const OPEN = 1
-const CLOSING = 2
-const CLOSED = 3
+/* https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
+WebSocket {
+  CONNECTING: 0,
+  OPEN: 1,
+  CLOSING: 2,
+  CLOSED: 3
+}	*/
 
-class WebSocket extends LitElement {
-  static get styles () {
-    return css`
+class WS extends LitElement {
+	static get styles () {
+		return css`
       * {
         /*
           --text-size: 1.7rem;
@@ -21,15 +23,17 @@ class WebSocket extends LitElement {
       }
 
       :host {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-        gap: 1rem;
+				display: grid;
+				grid-template-rows: 1fr 5fr 1fr;
+				justify-items: stretch;
+				align-items: center;
+				gap: 1rem;
+
         font-size: var(--text-size, 1.7rem);
-      }
+			}
 
       p {
+				margin: 0.3rem;
         /* font-size: 1.7rem; */
         color: var(--text1, #333);
       }
@@ -76,40 +80,43 @@ class WebSocket extends LitElement {
         background-color: var(--surface2, purple);
       }
 
-      .container {
-        min-width: 100%;
-        max-width: 500px;
-        flex-grow: 3;
-        align-self: flex-start;
+			#messages {
+				width: 100%;
+				height: 100%;
 
-        font-size: calc(var(--text-size, 1.7rem) * 0.8);
+				font-size: calc(var(--text-size, 1.7rem) * 0.8);
         text-align: left;
         overflow-y: auto;
-        overflow-x: hidden;
-      }
+        /* overflow-x: hidden; */
+			}
 
-      .container p {
-        text-overflow: ellipsis;
-        /* overflow: hidden; */
-        white-space: nowrap;
-      }
+			#prettify {
+				margin-left: 2.7rem;
+			}
 
-      .input-container {
-        position: relative;
-      }
+			#send {
+				width: 100%;
+			}
+
+			#inputs {
+				margin-top: 1rem;
+				margin-left: 3rem;
+				margin-right: 3rem;
+				display: flex;
+			}
 
       input[type=text] {
-        margin-top: 1rem;
-
-        width: 100%;
+				/* width: 100%;  TODO */
         min-height: calc(var(--ws-svg-size, 24px) * 2.4);
 
         border: none;
         border-bottom: 2px solid var(--text1, #333);
+
+				flex-grow: 2;
       }
 
       label[for="message"] {
-        /* visibility: hidden; */
+        visibility: hidden;
       }
 
       #message {
@@ -119,11 +126,8 @@ class WebSocket extends LitElement {
       #sent-btn {
         border-radius: 0;
         border-bottom: none;
+				border-left: none;
         border-top: none;
-
-        position: absolute;
-        right: 0;
-        bottom: 0.7rem;
       }
 
       #sent-btn svg {
@@ -137,198 +141,207 @@ class WebSocket extends LitElement {
         color: red;
       }
     `
-  }
+	}
 
-  static get properties () {
-    return {
-      url: String,
-      protocols: String,
-      ui: {
-        type: Boolean
-      },
-      auto: {
-        type: Boolean,
-        reflect: true
-      },
-      wsStatus: String,
-      error: String
-    }
-  }
+	static get properties () {
+		return {
+			url: String,
+			protocols: String,
+			ui: {
+				type: Boolean
+			},
+			auto: {
+				type: Boolean,
+				reflect: true
+			},
+			prettify: Boolean,
+			wsStatus: String,
+			error: String
+		}
+	}
 
-  constructor () {
-    super()
-    this.error = ''
-    this.wsStatus = 'Not Connected'
-  }
+	constructor () {
+		super()
+		this.error = ''
+		this.prettify = false
+		this.wsStatus = 'Not Connected'
+	}
 
-  connectedCallback () {
-    super.connectedCallback()
-  }
+	connectedCallback () {
+		super.connectedCallback()
+	}
 
-  disconnectedCallback () {
-    super.disconnectedCallback()
-    clearInterval(this._timerInterval)
-  }
+	disconnectedCallback () {
+		super.disconnectedCallback()
+		clearInterval(this._timerInterval)
+	}
 
-  attributeChangedCallback (name, oldVal, newVal) {
-    // trigger auto attribute
-    if (name === 'auto' && this.hasAttribute('auto')) {
-      this.connect()
-      this._timerInterval = setInterval(() => {
-        if (!this.ws) {
-          this.connect()
-        }
-      }, 10000)
-    }
-    // removed auto attribute
-    if (name === 'auto' && !this.hasAttribute('auto')) {
-      this._stopLoop()
-    }
-    super.attributeChangedCallback(name, oldVal, newVal)
-  }
+	attributeChangedCallback (name, oldVal, newVal) {
+		// trigger auto attribute
+		if (name === 'auto' && this.hasAttribute('auto')) {
+			this.connect()
+			this._timerInterval = setInterval(() => {
+				if (!this.ws) {
+					this.connect()
+				}
+			}, 10000)
+		}
+		// removed auto attribute
+		if (name === 'auto' && !this.hasAttribute('auto')) {
+			this._stopLoop()
+		}
+		super.attributeChangedCallback(name, oldVal, newVal)
+	}
 
-  connect () {
-    if (this.ws) {
-      return
-    }
-    try {
-      this.ws = new window.WebSocket(this.url, this.protocols)
-      // bind WebSocket events to component events
-      this.ws.addEventListener('open', this._onOpen.bind(this))
-      this.ws.addEventListener('close', this._onClose.bind(this))
-      this.ws.addEventListener('message', this._onMessage.bind(this))
-      this.ws.addEventListener('error', this._onError.bind(this))
-    } catch (error) {
-      // console.log(`@ERROR >> ${error}`)
-      this.error = error
-      this._dispatchMsg('ws-error', error)
-    }
-  }
+	connect () {
+		if (this.ws) {
+			return
+		}
+		try {
+			this.ws = new window.WebSocket(this.url, this.protocols)
+			// bind WebSocket events to component events
+			this.ws.addEventListener('open', this._onOpen.bind(this))
+			this.ws.addEventListener('close', this._onClose.bind(this))
+			this.ws.addEventListener('message', this._onMessage.bind(this))
+			this.ws.addEventListener('error', this._onError.bind(this))
+		} catch (error) {
+			this.error = error
+			this._dispatchMsg('ws-error', error)
+		}
+	}
 
-  _onOpen (event) {
-    // console.log('@WS >> onOpen')
-    this._updateWsStatus()
-  }
+	_onOpen () {
+		this._updateWsStatus()
+	}
 
-  _onClose (event) {
-    // console.log('@WS >> onClose')
-    this._updateWsStatus()
-  }
+	_onClose () {
+		this._updateWsStatus()
+	}
 
-  _onMessage (event) {
-    // console.log(`@MSG >> ${event.data}`)
-    this.error = ''
-    if (this.ui) {
-      this._appendMsgToContainer(event.data)
-    }
-    this._dispatchMsg('ws-message', event.data)
-  }
+	_onMessage (event) {
+		this._updateWsStatus()
+		this.error = ''
+		if (this.ui) {
+			if (this.prettify) {
+				const jsonObj = JSON.parse(event.data)
+				this._appendMsgToContainer(
+					JSON.stringify(jsonObj, undefined, 4))
+			} else {
+				this._appendMsgToContainer(event.data)
+			}
+		}
+		this._dispatchMsg('ws-message', event.data)
+	}
 
-  _onError (event) {
-    // console.log(`@WS >> onError ${event}`)
-    this.error = `Connection to ${this.url} FAILED`
-    this._updateWsStatus()
-    this._dispatchMsg('ws-error', event)
-  }
+	_onError (event) {
+		this.error = `Connection to ${this.url} FAILED`
+		this._updateWsStatus()
+		this._dispatchMsg('ws-error', event)
+	}
 
-  openWs () {
-    this.connect()
-  }
+	openWs () {
+		this.connect()
+	}
 
-  disconnect () {
-    this.auto = false
-    this.error = ''
-    this._stopLoop()
-    if (this.ws) {
-      this.ws.close()
-      this.ws = null
-    }
-  }
+	disconnect () {
+		this.auto = false
+		this.error = ''
+		this._stopLoop()
+		if (this.ws) {
+			this.ws.close()
+			this.ws = null
+		}
+	}
 
-  _toggleAuto () {
-    this.auto = !this.auto
-  }
+	_toggleAuto () {
+		this.auto = !this.auto
+	}
 
-  _stopLoop () {
-    clearInterval(this._timerInterval)
-  }
+	_stopLoop () {
+		clearInterval(this._timerInterval)
+	}
 
-  sendMsg (msg) {
-    if (this.ws) {
-      this.ws.send(msg)
-    }
-  }
+	sendMsg (msg) {
+		if (this.ws) {
+			this.ws.send(msg)
+		}
+	}
 
-  // ship message to the WebSocket server
-  _sendMsg () {
-    const msg = this.shadowRoot.querySelector('#message')?.value
-    if (this.ws && this.ws.readyState === OPEN) {
-      // console.log(`@WS SEND >> ${msg}`)
-      this.ws.send(msg)
-      // clean the input box
-      this.renderRoot.querySelector('#message').value = ''
-    }
-  }
+	// ship message to the WebSocket server
+	_sendMsg () {
+		const msg = this.shadowRoot.querySelector('#message')?.value
+		if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+			this.ws.send(msg)
+			// clean the input box
+			this.renderRoot.querySelector('#message').value = ''
+		}
+	}
 
-  _updateWsStatus () {
-    switch (this.ws?.readyState) {
-      case CONNECTING:
-        this.wsStatus = 'Connecting '
-        break
-      case OPEN:
-        this.wsStatus = 'Connected'
-        break
-      case CLOSING:
-        this.wsStatus = 'Closing '
-        break
-      case CLOSED:
-        this.wsStatus = 'Close'
-        break
-      default:
-        this.wsStatus = 'Not Connected'
-    }
+	_updateWsStatus () {
+		switch (this.ws?.readyState) {
+		case WebSocket.CONNECTING:
+			this.wsStatus = 'Connecting '
+			break
+		case WebSocket.OPEN:
+			this.wsStatus = 'Connected'
+			break
+		case WebSocket.CLOSING:
+			this.wsStatus = 'Closing '
+			break
+		case WebSocket.CLOSED:
+			this.wsStatus = 'Close'
+			break
+		default:
+			this.wsStatus = 'Not Connected'
+		}
 
-    this._dispatchMsg(
-      'ws-status',
-      this.ws?.readyState
-    )
-  }
+		this._dispatchMsg(
+			'ws-status',
+			this.ws?.readyState
+		)
+	}
 
-  _dispatchMsg (eventName, msg) {
-    const ce = new CustomEvent(
-      eventName,
-      {
-        detail: { message: msg },
-        bubbles: true,
-        composed: true,
-        cancelable: true
-      })
-    this.dispatchEvent(ce)
-  }
+	_dispatchMsg (eventName, msg) {
+		const ce = new CustomEvent(
+			eventName,
+			{
+				detail: { message: msg },
+				bubbles: true,
+				composed: true,
+				cancelable: true
+			})
+		this.dispatchEvent(ce)
+	}
 
-  _appendMsgToContainer (msg) {
-    const li = document.createElement('li')
-    li.innerText = msg
-    this.renderRoot.querySelector('#logs')
-      .appendChild(li)
-  }
+	_appendMsgToContainer (msg) {
+		const li = document.createElement('li')
+		li.innerText = msg
+		const list = this.renderRoot.querySelector('#logs')
+		list.insertBefore(li, list.childNodes[0])
+	}
 
-  _clean () {
-    this.error = ''
-    this.wsStatus = ''
-    this.ws = null
+	_clean () {
+		this.error = ''
+		this.wsStatus = ''
 
-    this.renderRoot.querySelector('#message')
-      .value = ''
-    this.renderRoot.querySelector('#logs')
-      .innerHTML = ''
-  }
+		this.renderRoot.querySelector('#message')
+			.value = ''
+		this.renderRoot.querySelector('#logs')
+			.innerHTML = ''
+	}
 
-  _uiTemplate () {
-    return html`  
-        <p>${this.wsStatus} ${this.url} </p>
+	_changePrettify (event) {
+		this.prettify = event.target.checked
+	}
 
-        <div class="buttons">
+	_uiTemplate () {
+		return html`
+
+        <div id="buttons">
+					<!-- WebSocket status as Web/API/WebSocket state_constants -->
+					<p>${this.wsStatus} ${this.url} </p>
+					<p class="error">${this.error}</p> 
+
           <!-- Open the ws connection -->
           <button
             title="Connect WebSocket"
@@ -369,44 +382,47 @@ class WebSocket extends LitElement {
           </button>
         </div>
 
-        <!-- Msg contanitor -->
-        <div class="container">
-          <p class="error">${this.error}</p> 
+        <!-- Error / Message container -->
+        <div id="messages">
+
+					<input type="checkbox" id="prettify" name="prettify" value="JSON Prettify"
+						@change=${this._changePrettify}>
+  				<label for="prettify">JSON Prettify</label><br>
+
           <ul id="logs">
           </ul>
         </div>
 
-        <div class="input-container">
+        <div id="send">
           <label for="message">
             Send msg to ${this.url}
           </label>
-          <input id="message" name="message" type="text"
-            placeholder="Insert here ...">
+					<div id="inputs">
+						<input id="message" name="message" type="text"
+							placeholder="Send msg to ${this.url}">
 
-          <button
-            id="sent-btn"
-            title="Send Message"
-            @click=${this._sendMsg}
-            ?disabled=${!this.ws}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24">
-              <path d="M0 0h24v24H0V0z" fill="none"/>
-              <path d="M4.01 6.03l7.51 3.22-7.52-1 .01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2-15 2 .01 7L23 12 2.01 3z"/>
-            </svg>
-          </button>
-
+						<button
+							id="sent-btn"
+							title="Send Message"
+							@click=${this._sendMsg}
+							?disabled=${!this.ws}>
+							<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24">
+								<path d="M0 0h24v24H0V0z" fill="none"/>
+								<path d="M4.01 6.03l7.51 3.22-7.52-1 .01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2-15 2 .01 7L23 12 2.01 3z"/>
+							</svg>
+						</button>
+					</div>
         </div>
-      
-      </div>
     `
-  }
+	}
 
-  render () {
-    return html`
+	render () {
+		return html`
       ${this.ui
-        ? this._uiTemplate()
-        : html``}
+		? this._uiTemplate()
+		: html``}
     `
-  }
+	}
 }
 
-customElements.define('web-socket', WebSocket)
+customElements.define('web-socket', WS)

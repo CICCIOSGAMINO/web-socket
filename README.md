@@ -4,9 +4,9 @@
 
 # 🍔 \<web-socket\>
 
-Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (noui=true), you can connect and disconnect from your WebSocket server or set auto attribute to set infinite connection loop.
+Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (ui attribute), you can connect and disconnect from your WebSocket server or set auto attribute to set an infinite connection loop.
 
-The UI is trigger based on WebSocket object, when the WebSocket is created the UI is active, close the WebSocket to unactive the UI (Connect WebScket, Autoconnect and send Button). The Close button set the WebSocket object to null.
+When using the UI click the Connect button to connect to the WebSocket server, the address of the server is set as an attribute on the component.
 
 <p align="center">
   <a href="#examples">examples</a> •
