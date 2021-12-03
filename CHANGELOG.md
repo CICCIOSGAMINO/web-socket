@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [4.1.0] - 03-12-2021
+
+### Changed
+	- Fix the layout grid bug into the web-socket
+
 ## [4.0.0] - 02-12-2021
 ### Changed
 	- New responsive layout based on grid

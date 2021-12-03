@@ -7,10 +7,6 @@ class AppShell extends LitElement {
       :host {
         display: grid;
 				grid-template-columns: 1fr 1fr;
-      	justify-content: stretch;
-				align-items: center;
-
-				text-align: center;
       }
 
       web-socket {

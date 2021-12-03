@@ -25,11 +25,12 @@ class WS extends LitElement {
       :host {
 				display: grid;
 				grid-template-rows: 1fr 5fr 1fr;
-				justify-items: stretch;
+				justify-content: stretch;
 				align-items: center;
 				gap: 1rem;
 
         font-size: var(--text-size, 1.7rem);
+				text-align: center;
 			}
 
       p {
