@@ -195,6 +195,10 @@ class WS extends LitElement {
 		this._initListeners()
 	}
 
+	getWebSocket () {
+		return this.ws
+	}
+
 	connect () {
 		if (this.ws) {
 			return

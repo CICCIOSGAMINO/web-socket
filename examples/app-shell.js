@@ -48,8 +48,13 @@ class AppShell extends LitElement {
 	}
 
 	#initSocket () {
-		const ws = new WebSocket('ws://127.0.0.1:8888')
-		const wc = this.renderRoot.querySelector('#myws')
+		// create your WebSocket object with Javascript
+		// const ws = new WebSocket('ws://127.0.0.1:8888')
+
+		// Or get the WebSocket from the WebComponent
+		const ws = this.renderRoot.querySelector('#ws-one')
+			.getWebSocket()
+		this.renderRoot.querySelector('#ws-two')
 			.passWebSocket(ws)
 	}
 
@@ -58,6 +63,7 @@ class AppShell extends LitElement {
 
 			<!-- Create WebSocket with the url -->
       <web-socket
+				id="ws-one"
         url="ws://127.0.0.1:8888"
         ui
         @ws-message=${this.handleMessage}
@@ -68,7 +74,7 @@ class AppShell extends LitElement {
 
 			<!-- Pass the WebSocket object with javascript -->
 			<web-socket
-				id="myws"
+				id="ws-two"
 				ui
         @ws-message=${this.handleMessage}
         @ws-status=${this.handleStatus}

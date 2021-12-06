@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.1] - 06-12-2021
+
+### Add
+	- getWebSocket () method to get back the WebSocket object from WebComponent
+
 ## [5.0.0] - 06-12-2021
 
 ### Add
