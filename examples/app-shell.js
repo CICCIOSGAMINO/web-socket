@@ -23,22 +23,40 @@ class AppShell extends LitElement {
     `
 	}
 
-	handleMessage (event) {
-		console.log(`@MSG >> ${event.detail.message}`)
+	connectedCallback () {
+		super.connectedCallback()
+		setTimeout(() => {
+			this.#initSocket()
+			console.log('@TIMING CONNECTION >> ....')
+		}, 5000)
 	}
 
-	handleStatus (event) {
+	handleMessage (e) {
+		console.log(
+			`@MSG ${e.target}>> ${e.detail.message}`)
+	}
+
+	handleStatus (e) {
 		// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
-		console.log(`@STATUS >> ${event.detail.message}`)
+		console.log(
+			`@STATUS ${e.target}>> ${e.detail.message}`)
 	}
 
-	handleError (event) {
-		console.log(`@ERROR >> ${event.detail.message}`)
+	handleError (e) {
+		console.log(
+			`@ERROR ${e.target}>> ${e.detail.message}`)
+	}
+
+	#initSocket () {
+		const ws = new WebSocket('ws://127.0.0.1:8888')
+		const wc = this.renderRoot.querySelector('#myws')
+			.passWebSocket(ws)
 	}
 
 	render () {
 		return html`
-			<h2>WebSocket - Console >> </h2>
+
+			<!-- Create WebSocket with the url -->
       <web-socket
         url="ws://127.0.0.1:8888"
         ui
@@ -46,6 +64,16 @@ class AppShell extends LitElement {
         @ws-status=${this.handleStatus}
 				@ws-error=${this.handleError}>
       </web-socket>
+
+
+			<!-- Pass the WebSocket object with javascript -->
+			<web-socket
+				id="myws"
+				ui
+        @ws-message=${this.handleMessage}
+        @ws-status=${this.handleStatus}
+				@ws-error=${this.handleError}>
+			</web-socket>
     `
 	}
 }

@@ -168,10 +168,6 @@ class WS extends LitElement {
 		this.wsStatus = 'Not Connected'
 	}
 
-	connectedCallback () {
-		super.connectedCallback()
-	}
-
 	disconnectedCallback () {
 		super.disconnectedCallback()
 		clearInterval(this._timerInterval)
@@ -194,21 +190,30 @@ class WS extends LitElement {
 		super.attributeChangedCallback(name, oldVal, newVal)
 	}
 
+	passWebSocket(ws) {
+		this.ws = ws
+		this._initListeners()
+	}
+
 	connect () {
 		if (this.ws) {
 			return
 		}
 		try {
 			this.ws = new window.WebSocket(this.url, this.protocols)
-			// bind WebSocket events to component events
-			this.ws.addEventListener('open', this._onOpen.bind(this))
-			this.ws.addEventListener('close', this._onClose.bind(this))
-			this.ws.addEventListener('message', this._onMessage.bind(this))
-			this.ws.addEventListener('error', this._onError.bind(this))
+			this._initListeners()
 		} catch (error) {
 			this.error = error
 			this._dispatchMsg('ws-error', error)
 		}
+	}
+
+	_initListeners () {
+		// bind WebSocket events to component events
+		this.ws.addEventListener('open', this._onOpen.bind(this))
+		this.ws.addEventListener('close', this._onClose.bind(this))
+		this.ws.addEventListener('message', this._onMessage.bind(this))
+		this.ws.addEventListener('error', this._onError.bind(this))
 	}
 
 	_onOpen () {
@@ -238,10 +243,6 @@ class WS extends LitElement {
 		this.error = `Connection to ${this.url} FAILED`
 		this._updateWsStatus()
 		this._dispatchMsg('ws-error', event)
-	}
-
-	openWs () {
-		this.connect()
 	}
 
 	disconnect () {
@@ -347,7 +348,7 @@ class WS extends LitElement {
           <button
             title="Connect WebSocket"
             ?disabled=${this.ws}
-            @click=${this.openWs}>
+            @click=${this.connect}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/>
             </svg>

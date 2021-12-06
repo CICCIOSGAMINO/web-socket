@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.0.0] - 06-12-2021
+
+### Add
+	- Now you can pass the WebSocket object when creating the WebComponent
+		Check the examples
+
 ## [4.1.0] - 03-12-2021
 
 ### Changed

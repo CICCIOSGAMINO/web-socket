@@ -4,7 +4,7 @@
 
 # 🍔 \<web-socket\>
 
-v4.1.0 - 03-12-2021
+v5.0.0 - 06-12-2021
 
 Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (ui attribute), you can connect and disconnect from your WebSocket server or set auto attribute to set an infinite connection loop.
 
@@ -106,6 +106,7 @@ npm install --save @cicciosgamino/web-socket
 | `connect() => void`    | Create WebSocket to url, protocols specified as attributes
 | `disconnect() => void` | Close the WebSocket
 | `sendMsg(msg) => void` | Send message down to websocket
+| `passWebSocket(ws) => void`| Pass a WebSocket object to the widget (you create it)
 
 ### Events
 
