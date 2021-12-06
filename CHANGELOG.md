@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.2.0] - 06-12-2021
+
+### Changed
+	- Url in UI retrieved from WebSocket
+	- Update the wsStatus when passWebSocket() is called
+	- UI is controlled with this.connected Boolean
+
+### Add
+	- Handle not valid JSON When JSON checkbox is true
+
 ## [5.0.1] - 06-12-2021
 
 ### Add

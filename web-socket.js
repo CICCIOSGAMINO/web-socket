@@ -155,6 +155,8 @@ class WS extends LitElement {
 				type: Boolean,
 				reflect: true
 			},
+			ws: Object,
+			connected: Boolean,
 			prettify: Boolean,
 			wsStatus: String,
 			error: String
@@ -193,6 +195,7 @@ class WS extends LitElement {
 	passWebSocket(ws) {
 		this.ws = ws
 		this._initListeners()
+		this._updateWsStatus()
 	}
 
 	getWebSocket () {
@@ -201,7 +204,7 @@ class WS extends LitElement {
 
 	connect () {
 		if (this.ws) {
-			return
+			this.ws = null
 		}
 		try {
 			this.ws = new window.WebSocket(this.url, this.protocols)
@@ -213,11 +216,13 @@ class WS extends LitElement {
 	}
 
 	_initListeners () {
-		// bind WebSocket events to component events
-		this.ws.addEventListener('open', this._onOpen.bind(this))
-		this.ws.addEventListener('close', this._onClose.bind(this))
-		this.ws.addEventListener('message', this._onMessage.bind(this))
-		this.ws.addEventListener('error', this._onError.bind(this))
+		if (this.ws) {
+			// bind WebSocket events to component events
+			this.ws.addEventListener('open', this._onOpen.bind(this))
+			this.ws.addEventListener('close', this._onClose.bind(this))
+			this.ws.addEventListener('message', this._onMessage.bind(this))
+			this.ws.addEventListener('error', this._onError.bind(this))
+		}
 	}
 
 	_onOpen () {
@@ -233,9 +238,16 @@ class WS extends LitElement {
 		this.error = ''
 		if (this.ui) {
 			if (this.prettify) {
-				const jsonObj = JSON.parse(event.data)
-				this._appendMsgToContainer(
-					JSON.stringify(jsonObj, undefined, 4))
+				try {
+					const jsonObj = JSON.parse(event.data)
+					this._appendMsgToContainer(
+						JSON.stringify(jsonObj, undefined, 4))
+				} catch(ex) {
+					this._appendMsgToContainer(
+						`@JSON-NOT-VALID >> ${event.data}`
+					)
+				}
+				
 			} else {
 				this._appendMsgToContainer(event.data)
 			}
@@ -255,7 +267,6 @@ class WS extends LitElement {
 		this._stopLoop()
 		if (this.ws) {
 			this.ws.close()
-			this.ws = null
 		}
 	}
 
@@ -286,16 +297,20 @@ class WS extends LitElement {
 	_updateWsStatus () {
 		switch (this.ws?.readyState) {
 		case WebSocket.CONNECTING:
-			this.wsStatus = 'Connecting '
+			this.wsStatus = 'Connecting'
+			this.connected = false
 			break
 		case WebSocket.OPEN:
 			this.wsStatus = 'Connected'
+			this.connected = true
 			break
 		case WebSocket.CLOSING:
 			this.wsStatus = 'Closing '
+			this.connected = false
 			break
 		case WebSocket.CLOSED:
 			this.wsStatus = 'Close'
+			this.connected = false
 			break
 		default:
 			this.wsStatus = 'Not Connected'
@@ -345,13 +360,13 @@ class WS extends LitElement {
 
         <div id="buttons">
 					<!-- WebSocket status as Web/API/WebSocket state_constants -->
-					<p>${this.wsStatus} ${this.url} </p>
+					<p>${this.wsStatus} ${this.ws?.url} </p>
 					<p class="error">${this.error}</p> 
 
           <!-- Open the ws connection -->
           <button
             title="Connect WebSocket"
-            ?disabled=${this.ws}
+            ?disabled=${this.connected}
             @click=${this.connect}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0V0z" fill="none"/><path d="M10 8.64L15.27 12 10 15.36V8.64M8 5v14l11-7L8 5z"/>
@@ -360,7 +375,7 @@ class WS extends LitElement {
           <!-- Close the ws connection -->
           <button
             title="Close WebSocket"
-            ?disabled=${!this.ws}
+            ?disabled=${!this.connected}
             @click=${this.disconnect}>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
               <path d="M0 0h24v24H0V0z" fill="none"/>

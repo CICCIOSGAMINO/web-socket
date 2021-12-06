@@ -23,6 +23,13 @@ class AppShell extends LitElement {
     `
 	}
 
+	/*
+	static get properties () {
+		return {
+			ws: Object
+		}
+	} */
+
 	connectedCallback () {
 		super.connectedCallback()
 		setTimeout(() => {
