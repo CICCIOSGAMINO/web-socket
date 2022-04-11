@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [5.3.0] - 11-04-2022
+
+### Changed
+  - web-socket.js connection (null always set before create new connection)
+
 ## [5.2.0] - 06-12-2021
 
 ### Changed

@@ -203,9 +203,8 @@ class WS extends LitElement {
 	}
 
 	connect () {
-		if (this.ws) {
-			this.ws = null
-		}
+		this.ws = null
+		
 		try {
 			this.ws = new window.WebSocket(this.url, this.protocols)
 			this._initListeners()

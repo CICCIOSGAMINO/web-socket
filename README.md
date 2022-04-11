@@ -4,7 +4,7 @@
 
 # 🍔 \<web-socket\>
 
-v5.2.0 - 06-12-2021
+v5.3.0 - 11-04-2022
 
 Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (ui attribute), you can connect and disconnect from your WebSocket server or set auto attribute to set an infinite connection loop.
 

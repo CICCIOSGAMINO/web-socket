@@ -32,10 +32,12 @@ class AppShell extends LitElement {
 
 	connectedCallback () {
 		super.connectedCallback()
+
 		setTimeout(() => {
 			this.#initSocket()
 			console.log('@TIMING CONNECTION >> ....')
 		}, 5000)
+		
 	}
 
 	handleMessage (e) {
