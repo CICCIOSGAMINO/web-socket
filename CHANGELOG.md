@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.0.0] - 21-04-2022
+
+### Changed
+  - web-socket check the url presence before try to create a new WebSockets
+
 ## [5.3.0] - 11-04-2022
 
 ### Changed

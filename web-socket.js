@@ -203,15 +203,22 @@ class WS extends LitElement {
 	}
 
 	connect () {
-		this.ws = null
 		
 		try {
+
+			if (!this.url) {
+				console.log(`@URL NOT Valid >> ${this.url}`)
+				return
+			}
+
 			this.ws = new window.WebSocket(this.url, this.protocols)
 			this._initListeners()
+
 		} catch (error) {
 			this.error = error
 			this._dispatchMsg('ws-error', error)
 		}
+
 	}
 
 	_initListeners () {

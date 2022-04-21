@@ -63,6 +63,7 @@ class AppShell extends LitElement {
 		// Or get the WebSocket from the WebComponent
 		const ws = this.renderRoot.querySelector('#ws-one')
 			.getWebSocket()
+		// share the same WebSocket on both web-socket components
 		this.renderRoot.querySelector('#ws-two')
 			.passWebSocket(ws)
 	}
