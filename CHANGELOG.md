@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.1.0] - 22-04-2022
+
+### Changed
+  - Fix auto connect functionality when the url attribute changes
+
 ## [6.0.0] - 21-04-2022
 
 ### Changed

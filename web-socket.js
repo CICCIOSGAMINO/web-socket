@@ -146,7 +146,9 @@ class WS extends LitElement {
 
 	static get properties () {
 		return {
-			url: String,
+			url: {
+				type: String
+			},
 			protocols: String,
 			ui: {
 				type: Boolean
@@ -175,6 +177,7 @@ class WS extends LitElement {
 		clearInterval(this._timerInterval)
 	}
 
+	// DOM method
 	attributeChangedCallback (name, oldVal, newVal) {
 		// trigger auto attribute
 		if (name === 'auto' && this.hasAttribute('auto')) {
@@ -189,6 +192,7 @@ class WS extends LitElement {
 		if (name === 'auto' && !this.hasAttribute('auto')) {
 			this._stopLoop()
 		}
+
 		super.attributeChangedCallback(name, oldVal, newVal)
 	}
 
@@ -211,6 +215,8 @@ class WS extends LitElement {
 				return
 			}
 
+			this.ws = null
+
 			this.ws = new window.WebSocket(this.url, this.protocols)
 			this._initListeners()
 
@@ -219,6 +225,15 @@ class WS extends LitElement {
 			this._dispatchMsg('ws-error', error)
 		}
 
+	}
+
+	// Lit method
+	updated (changedProperties) {
+		// changedProperties returns values before the update 
+		// console.log(changedProperties)
+		if (changedProperties.has('url') && this.auto) {
+			this.connect()
+		}
 	}
 
 	_initListeners () {

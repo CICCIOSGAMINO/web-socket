@@ -33,10 +33,16 @@ class AppShell extends LitElement {
 	connectedCallback () {
 		super.connectedCallback()
 
+		// test - pass pass ws to other component
 		setTimeout(() => {
 			this.#initSocket()
 			console.log('@TIMING CONNECTION >> ....')
 		}, 5000)
+
+		setTimeout(() => {
+			this.#updateUrl()
+			console.log('')
+		}, 7000)
 		
 	}
 
@@ -54,6 +60,12 @@ class AppShell extends LitElement {
 	handleError (e) {
 		console.log(
 			`@ERROR ${e.target}>> ${e.detail.message}`)
+	}
+
+	#updateUrl () {
+		const wsUrl = 'ws://127.0.0.1:9999'
+		this.renderRoot.querySelector('web-socket')
+			.setAttribute('url', wsUrl)
 	}
 
 	#initSocket () {
@@ -76,6 +88,7 @@ class AppShell extends LitElement {
 				id="ws-one"
         url="ws://127.0.0.1:8888"
         ui
+				auto
         @ws-message=${this.handleMessage}
         @ws-status=${this.handleStatus}
 				@ws-error=${this.handleError}>

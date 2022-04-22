@@ -4,7 +4,7 @@
 
 # 🍔 \<web-socket\>
 
-v6.0.0 - 21-04-2022
+v6.1.0 - 22-04-2022
 
 Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (ui attribute), you can connect and disconnect from your WebSocket server or set auto attribute to set an infinite connection loop.
 
@@ -176,6 +176,9 @@ npm install -g @web/dev-server
 npm install
 npm run serve
 ```
+
+### Examples
+Into the examples folder you can find the app-shell.js where the code of how use the component reside. Into the example two setTimeout trigger two situation, after 5sec the WebSocket (connect or not connect) is passed to an other web-socket component so the WebSocket object is shared between two web-socket components. After 7sec the url attribute of the first component is changed to another value (to try a bad address).
 
 ## Contributing
 
