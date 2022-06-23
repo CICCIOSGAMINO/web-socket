@@ -36,13 +36,29 @@ class AppShell extends LitElement {
 		// test - pass pass ws to other component
 		setTimeout(() => {
 			this.#initSocket()
-			console.log('@TIMING CONNECTION >> ....')
+			console.log('@TIMING CONNECTION >> ...')
 		}, 5000)
 
+		// update the url
 		setTimeout(() => {
 			this.#updateUrl()
-			console.log('')
+			console.log('@UPDATE URL >> ...')
 		}, 7000)
+
+		// console the ws object & set a global variable window.websocket
+		setTimeout(() => {
+			const ws = this.renderRoot.querySelector('web-socket').getWebSocket()
+			console.log('@WEB-SOCKET >> ...')
+			console.log(ws)
+
+			window.websocket = ws
+		}, 10000)
+
+		// console the global window.websocket
+		setTimeout(() => {
+			console.log('@WINDOW.websocket')
+			console.log(window.websocket)
+		}, 12000)
 		
 	}
 
@@ -78,6 +94,11 @@ class AppShell extends LitElement {
 		// share the same WebSocket on both web-socket components
 		this.renderRoot.querySelector('#ws-two')
 			.passWebSocket(ws)
+
+		// set the url too for future connections by button
+		// reminder to set the url on the component if you want use the buttons
+		this.renderRoot.querySelector('#ws-two')
+			.setAttribute('url','ws://127.0.0.1:8888')
 	}
 
 	render () {

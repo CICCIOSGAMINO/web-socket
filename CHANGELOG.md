@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [6.3.0] - 23-06-2022
+
+### Changed
+  - Minor fix in the examples, README.md
+
+## [6.2.0] - 22-04-2022
+
+### Changed
+  - TODO this.ws = null when a bad url value is received
+
+
 ## [6.1.0] - 22-04-2022
 
 ### Changed

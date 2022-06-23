@@ -4,7 +4,7 @@
 
 # 🍔 \<web-socket\>
 
-v6.1.0 - 22-04-2022
+v6.3.0 - 23-06-2022
 
 Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (ui attribute), you can connect and disconnect from your WebSocket server or set auto attribute to set an infinite connection loop.
 
@@ -57,6 +57,9 @@ npm install --save @cicciosgamino/web-socket
 3. Place in your HTML
 ```html
 <web-socket url="ws://127.0.0.1:8888" ui></web-socket>
+
+<!-- Place your element without url, set with Js before try to use ws> -->
+<web-socket></web-socket>
 ```
 
 4. Use the component with LitElement
@@ -86,6 +89,18 @@ npm install --save @cicciosgamino/web-socket
     `
   }
 }
+```
+
+5. Set the url attribute with
+
+```javascript
+// plain html
+document.querySelector('#ws-element')
+			.setAttribute('url','ws://127.0.0.1:8888')
+
+// in lit element
+this.renderRoot.querySelector('#ws-element')
+			.setAttribute('url','ws://127.0.0.1:8888')
 ```
 
 ## 🐝 API

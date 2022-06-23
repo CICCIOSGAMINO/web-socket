@@ -8,7 +8,7 @@ WebSocket {
   CLOSED: 3
 }	*/
 
-class WS extends LitElement {
+class Ws extends LitElement {
 	static get styles () {
 		return css`
       * {
@@ -212,15 +212,19 @@ class WS extends LitElement {
 
 			if (!this.url) {
 				console.log(`@URL NOT Valid >> ${this.url}`)
+				this.ws = null
 				return
 			}
 
+			// TODO
 			this.ws = null
 
 			this.ws = new window.WebSocket(this.url, this.protocols)
 			this._initListeners()
 
 		} catch (error) {
+			// TODO
+			this.ws = null
 			this.error = error
 			this._dispatchMsg('ws-error', error)
 		}
@@ -467,4 +471,4 @@ class WS extends LitElement {
 	}
 }
 
-customElements.define('web-socket', WS)
+customElements.define('web-socket', Ws)
