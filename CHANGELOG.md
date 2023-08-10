@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [7.0.0] - 10-08-2023
+
+### Changed
+  - improve stability
+  - auto - willUpdate
+  - major / minor updates
+  - update the getWebSocket / passWebSocket methods
+
+### Add
+  - debug flag to trigger all console.log messages
+  - this.error with more error messages
+
 ## [6.3.0] - 23-06-2022
 
 ### Changed

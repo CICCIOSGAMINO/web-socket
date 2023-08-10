@@ -1,6 +1,13 @@
 import { LitElement, html, css } from 'lit'
 import '../web-socket'
 
+const WS_STATUS_MSG = [
+	'CONNECTING',
+	'OPEN',
+	'CLOSING',
+	'CLOSED'
+]
+
 class AppShell extends LitElement {
 	static get styles () {
 		return css`
@@ -23,64 +30,60 @@ class AppShell extends LitElement {
     `
 	}
 
-	/*
-	static get properties () {
-		return {
-			ws: Object
-		}
-	} */
-
 	connectedCallback () {
 		super.connectedCallback()
 
-		// test - pass pass ws to other component
+		// scenario - get active ws from ws-one and pass to ws-two
 		setTimeout(() => {
 			this.#initSocket()
-			console.log('@TIMING CONNECTION >> ...')
-		}, 5000)
-
-		// update the url
-		setTimeout(() => {
-			this.#updateUrl()
-			console.log('@UPDATE URL >> ...')
+			console.log(`ws-two >> @INIT`)
 		}, 7000)
 
-		// console the ws object & set a global variable window.websocket
-		setTimeout(() => {
-			const ws = this.renderRoot.querySelector('web-socket').getWebSocket()
-			console.log('@WEB-SOCKET >> ...')
-			console.log(ws)
+		// scenario - update the url of ws-one
+		// setTimeout(() => {
+			
+		// 	const wsUrl = 'ws://127.0.0.1:9999'
+		// 	this.renderRoot.getElementById('ws-one')
+		// 		.setAttribute('url', wsUrl)
 
-			window.websocket = ws
-		}, 10000)
+		// 	console.log(`ws-one >> @URL-UPDATED ${wsUrl}`)
+			
+		// }, 11000)
+
+		// console the ws object & set a global variable window.websocket
+		// setTimeout(() => {
+		// 	const ws = this.renderRoot.querySelector('web-socket').getWebSocket()
+		// 	console.log('@SOCKET1 >>')
+		// 	console.log(ws)
+		// }, 15000)
 
 		// console the global window.websocket
-		setTimeout(() => {
-			console.log('@WINDOW.websocket')
-			console.log(window.websocket)
-		}, 12000)
+		// setTimeout(() => {
+		// 	console.log('@WINDOW.websocket')
+		// 	console.log(window.websocket)
+		// }, 12000)
 		
 	}
 
 	handleMessage (e) {
 		console.log(
-			`@MSG ${e.target}>> ${e.detail.message}`)
+			`${e.target.id} @MSG >> ${e.detail.message}`)
 	}
 
 	handleStatus (e) {
 		// https://developer.mozilla.org/en-US/docs/Web/API/WebSocket#Ready_state_constants
 		console.log(
-			`@STATUS ${e.target}>> ${e.detail.message}`)
+			`${e.target.id} @STATUS >> ${WS_STATUS_MSG[parseInt(e.detail.message)]}`)
 	}
 
 	handleError (e) {
 		console.log(
-			`@ERROR ${e.target}>> ${e.detail.message}`)
+			`${e.target.id} @ERROR >> ${JSON.stringify(e.detail.message)}`)
 	}
 
 	#updateUrl () {
 		const wsUrl = 'ws://127.0.0.1:9999'
-		this.renderRoot.querySelector('web-socket')
+		this.renderRoot.getElementById('ws-one')
 			.setAttribute('url', wsUrl)
 	}
 
@@ -97,31 +100,30 @@ class AppShell extends LitElement {
 
 		// set the url too for future connections by button
 		// reminder to set the url on the component if you want use the buttons
-		this.renderRoot.querySelector('#ws-two')
-			.setAttribute('url','ws://127.0.0.1:8888')
+		// this.renderRoot.querySelector('#ws-two')
+		// 	.setAttribute('url','ws://127.0.0.1:8888')
 	}
 
 	render () {
 		return html`
 
 			<!-- Create WebSocket with the url -->
-      <web-socket
+      		<web-socket
 				id="ws-one"
-        url="ws://127.0.0.1:8888"
-        ui
+        		url="ws://127.0.0.1:8888"
+        		ui
 				auto
-        @ws-message=${this.handleMessage}
-        @ws-status=${this.handleStatus}
+        		@ws-message=${this.handleMessage}
+        		@ws-status=${this.handleStatus}
 				@ws-error=${this.handleError}>
-      </web-socket>
-
+      		</web-socket>
 
 			<!-- Pass the WebSocket object with javascript -->
 			<web-socket
 				id="ws-two"
 				ui
-        @ws-message=${this.handleMessage}
-        @ws-status=${this.handleStatus}
+        		@ws-message=${this.handleMessage}
+        		@ws-status=${this.handleStatus}
 				@ws-error=${this.handleError}>
 			</web-socket>
     `

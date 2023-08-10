@@ -8,87 +8,93 @@ WebSocket {
   CLOSED: 3
 }	*/
 
+//  @DEBUG flag
+const isDebug = false
+
+// when auto try reconnect every timing
+const AUTO_RECONNECTIONG_TIME = 10000
+
 class Ws extends LitElement {
+
 	static get styles () {
 		return css`
-      * {
-        /*
-          --text-size: 1.7rem;
-          --ws-svg-size: 24px;
-          --text1:
-          --text2:
-          --surface1:
-          --surface2:
-          */
-      }
 
-      :host {
+			:host {
+				/*
+				--text-size: 1.7rem;
+				--ws-svg-size: 24px;
+				--text1:
+				--text2:
+				--surface1:
+				--surface2:
+				*/
+				
 				display: grid;
 				grid-template-rows: 1fr 5fr 1fr;
 				justify-content: stretch;
 				align-items: center;
 				gap: 1rem;
 
-        font-size: var(--text-size, 1.7rem);
+				font-size: var(--text-size, 1.7rem);
 				text-align: center;
 			}
 
-      p {
-				margin: 0.3rem;
-        /* font-size: 1.7rem; */
-        color: var(--text1, #333);
-      }
+			p {
+						margin: 0.3rem;
+				/* font-size: 1.7rem; */
+				color: var(--text1, #333);
+			}
 
-      button {
-        display: inline-block;
-        line-height: calc(var(--ws-svg-size, 24px) * 0.5);
+			button {
+				display: inline-block;
+				line-height: calc(var(--ws-svg-size, 24px) * 0.5);
 
-        min-width: calc(var(--ws-svg-size, 24px) * 2);
-        min-height: calc(var(--ws-svg-size, 24px) * 2);
+				min-width: calc(var(--ws-svg-size, 24px) * 2);
+				min-height: calc(var(--ws-svg-size, 24px) * 2);
 
-        border: 2px solid var(--text1, #333);
-        border-radius: 50%;
-        background-color: transparent;
+				border: 2px solid var(--text1, #333);
+				border-radius: 50%;
+				background-color: transparent;
 
-        cursor: pointer;
-      }
+				cursor: pointer;
+			}
 
-      button svg {
-        width: var(--ws-svg-size, 24px);
-        height: var(--ws-svg-size, 24px);
-        fill: var(--text1, #333);
-      }
+			button svg {
+				width: var(--ws-svg-size, 24px);
+				height: var(--ws-svg-size, 24px);
+				fill: var(--text1, #333);
+			}
 
-      button:disabled {
-        background-color: var(--text1, #333);
-        cursor: none;
-        cursor: not-allowed;
-      }
+			button:disabled {
+				background-color: var(--text1, #333);
+				cursor: none;
+				cursor: not-allowed;
+			}
 
-      button:disabled svg {
-        fill: var(--surface1, whitesmoke);
-      }
+			button:disabled svg {
+				fill: var(--surface1, whitesmoke);
+			}
 
-      button:hover:disabled {
-        border: 2px solid var(--text1, #333);
-      }
+			button:hover:disabled {
+				border: 2px solid var(--text1, #333);
+			}
 
-      button:hover:disabled svg {
-        fill: var(--surface1, whitesmoke);
-      }
+			button:hover:disabled svg {
+				fill: var(--surface1, whitesmoke);
+			}
 
-      button:active {
-        background-color: var(--surface2, purple);
-      }
+			button:active {
+				background-color: var(--surface2, purple);
+			}
 
 			#messages {
 				width: 100%;
 				height: 100%;
 
 				font-size: calc(var(--text-size, 1.7rem) * 0.8);
-        text-align: left;
-        overflow-y: auto;
-        /* overflow-x: hidden; */
+        		text-align: left;
+        		overflow-y: auto;
+        		/* overflow-x: hidden; */
 			}
 
 			#prettify {
@@ -106,42 +112,42 @@ class Ws extends LitElement {
 				display: flex;
 			}
 
-      input[type=text] {
-				/* width: 100%;  TODO */
-        min-height: calc(var(--ws-svg-size, 24px) * 2.4);
+			input[type=text] {
+						/* width: 100%;  TODO */
+				min-height: calc(var(--ws-svg-size, 24px) * 2.4);
 
-        border: none;
-        border-bottom: 2px solid var(--text1, #333);
+				border: none;
+				border-bottom: 2px solid var(--text1, #333);
 
-				flex-grow: 2;
-      }
+						flex-grow: 2;
+			}
 
-      label[for="message"] {
-        visibility: hidden;
-      }
+			label[for="message"] {
+				visibility: hidden;
+			}
 
-      #message {
-        font-size: var(--text-size, 1.7rem);
-      }
+			#message {
+				font-size: var(--text-size, 1.7rem);
+			}
 
-      #sent-btn {
-        border-radius: 0;
-        border-bottom: none;
-				border-left: none;
-        border-top: none;
-      }
+			#sent-btn {
+				border-radius: 0;
+				border-bottom: none;
+						border-left: none;
+				border-top: none;
+			}
 
-      #sent-btn svg {
-        width: calc(var(--ws-svg-size, 24px) * 0.9);
-        height: calc(var(--ws-svg-size, 24px) * 0.9);
-      }
+			#sent-btn svg {
+				width: calc(var(--ws-svg-size, 24px) * 0.9);
+				height: calc(var(--ws-svg-size, 24px) * 0.9);
+			}
 
-      .error {
-        text-align: center;
-        min-height: 2.3rem;
-        color: red;
-      }
-    `
+			.error {
+				text-align: center;
+				min-height: 2.3rem;
+				color: red;
+			}
+		`
 	}
 
 	static get properties () {
@@ -155,7 +161,6 @@ class Ws extends LitElement {
 			},
 			auto: {
 				type: Boolean,
-				reflect: true
 			},
 			ws: Object,
 			connected: Boolean,
@@ -167,36 +172,98 @@ class Ws extends LitElement {
 
 	constructor () {
 		super()
+
+		this.compId = crypto.randomUUID()
+		
+		this.auto = false
 		this.error = ''
 		this.prettify = false
 		this.wsStatus = 'Not Connected'
 	}
 
+	connectedCallback () {
+		super.connectedCallback()
+	}
+
 	disconnectedCallback () {
-		super.disconnectedCallback()
 		clearInterval(this._timerInterval)
+		super.disconnectedCallback()
 	}
 
-	// DOM method
-	attributeChangedCallback (name, oldVal, newVal) {
-		// trigger auto attribute
-		if (name === 'auto' && this.hasAttribute('auto')) {
-			this.connect()
-			this._timerInterval = setInterval(() => {
-				if (!this.ws) {
-					this.connect()
-				}
-			}, 10000)
-		}
-		// removed auto attribute
-		if (name === 'auto' && !this.hasAttribute('auto')) {
-			this._stopLoop()
+	willUpdate (changedProperties) {
+
+		// handle the url changes
+		if (changedProperties.has('url')) {
+			this.urlChanged()
 		}
 
-		super.attributeChangedCallback(name, oldVal, newVal)
+		// handle the auto attribute changes
+		if (changedProperties.has('auto')) {
+
+			// auto set so connect automatically and start loop
+			if (this.auto) {
+				this.log('@WILL-UPDATE >> Connect + Loop')
+				this.triggerTimeInterval()
+			} else {
+				this.log('@WILL-UPDATE >> Stop Loop')
+				// stop loop, in this mode ws do NOT connect automatically
+				this._stopLoop()
+			}
+
+		}
+
 	}
 
-	passWebSocket(ws) {
+	log(msg) {
+
+		if (!isDebug) return
+
+		let strMsg
+
+		switch (typeof msg) {
+			case 'object':
+				strMsg = JSON.stringify(msg)
+				break
+			case 'string':
+				strMsg = `${msg}`
+			case 'number':
+				strMsg = parseInt(msg)
+			default:
+				strMsg = msg
+		}
+
+		// check if string or object
+		console.log(this.compId, strMsg)
+	}
+
+	urlChanged () {
+
+		// if present close the past ws connection
+		if (this.ws) {
+			this.ws.close()
+		}
+
+	}
+
+	triggerTimeInterval () {
+
+		if (this._timerInterval) return
+
+		this.connect()
+
+		this._timerInterval = setInterval(() => {
+
+			if (!this.ws) {
+				this.connect()
+			}
+
+		}, AUTO_RECONNECTIONG_TIME)
+	}
+
+	// when you pass a WebSocket you do NOT need the url to get
+	// connected to active WebSocket, but if disconnected you
+	// CANNOT recconect without the right url
+	passWebSocket (ws) {
 		this.ws = ws
 		this._initListeners()
 		this._updateWsStatus()
@@ -207,46 +274,56 @@ class Ws extends LitElement {
 	}
 
 	connect () {
-		
+
 		try {
 
 			if (!this.url) {
-				console.log(`@URL NOT Valid >> ${this.url}`)
-				this.ws = null
+				this.log(`@URL NOT Valid >> ${this.url}`)
+				this.error = `@URL NOT Valid >> ${this.url}`
 				return
 			}
-
-			// TODO
-			this.ws = null
 
 			this.ws = new window.WebSocket(this.url, this.protocols)
 			this._initListeners()
 
 		} catch (error) {
-			// TODO
-			this.ws = null
 			this.error = error
 			this._dispatchMsg('ws-error', error)
 		}
 
 	}
 
-	// Lit method
-	updated (changedProperties) {
-		// changedProperties returns values before the update 
-		// console.log(changedProperties)
-		if (changedProperties.has('url') && this.auto) {
-			this.connect()
-		}
-	}
-
 	_initListeners () {
+
 		if (this.ws) {
+
+			this._removeListeners()
+
+			this.log('@ADD-LISTENERS >> ')
+
 			// bind WebSocket events to component events
 			this.ws.addEventListener('open', this._onOpen.bind(this))
 			this.ws.addEventListener('close', this._onClose.bind(this))
 			this.ws.addEventListener('message', this._onMessage.bind(this))
 			this.ws.addEventListener('error', this._onError.bind(this))
+		}
+	}
+
+	/**
+	 * Needed when a socket is passed to other web-socket component, and the
+	 * previous need to detach listeners
+	 */
+	_removeListeners () {
+
+		if (this.ws) {
+
+			this.log('@REMOVE-LISTENERS >> ')
+
+			// bind WebSocket events to component events
+			this.ws.removeEventListener('open', this._onOpen.bind(this))
+			this.ws.removeEventListener('close', this._onClose.bind(this))
+			this.ws.removeEventListener('message', this._onMessage.bind(this))
+			this.ws.removeEventListener('error', this._onError.bind(this))
 		}
 	}
 
@@ -256,6 +333,8 @@ class Ws extends LitElement {
 
 	_onClose () {
 		this._updateWsStatus()
+		// connection close, discard old websocket
+		this.ws = null
 	}
 
 	_onMessage (event) {
@@ -384,9 +463,9 @@ class Ws extends LitElement {
 		return html`
 
         <div id="buttons">
-					<!-- WebSocket status as Web/API/WebSocket state_constants -->
-					<p>${this.wsStatus} ${this.ws?.url} </p>
-					<p class="error">${this.error}</p> 
+			<!-- WebSocket status as Web/API/WebSocket state_constants -->
+			<p>${this.wsStatus} ${this.ws?.url} </p>
+			<p class="error">${this.error}</p>
 
           <!-- Open the ws connection -->
           <button
@@ -431,43 +510,48 @@ class Ws extends LitElement {
         <!-- Error / Message container -->
         <div id="messages">
 
-					<input type="checkbox" id="prettify" name="prettify" value="JSON Prettify"
-						@change=${this._changePrettify}>
-  				<label for="prettify">JSON Prettify</label><br>
+			<input
+				id="prettify"
+				type="checkbox"
+				name="prettify"
+				value="JSON Prettify"
+				@change=${this._changePrettify}>
 
-          <ul id="logs">
-          </ul>
+			<label for="prettify">JSON Prettify</label>
+			<br>
+
+			<ul id="logs">
+			</ul>
         </div>
 
         <div id="send">
           <label for="message">
             Send msg to ${this.url}
           </label>
-					<div id="inputs">
-						<input id="message" name="message" type="text"
-							placeholder="Send msg to ${this.url}">
+			<div id="inputs">
+				<input id="message" name="message" type="text"
+					placeholder="Send msg to ${this.url}">
 
-						<button
-							id="sent-btn"
-							title="Send Message"
-							@click=${this._sendMsg}
-							?disabled=${!this.ws}>
-							<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24">
-								<path d="M0 0h24v24H0V0z" fill="none"/>
-								<path d="M4.01 6.03l7.51 3.22-7.52-1 .01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2-15 2 .01 7L23 12 2.01 3z"/>
-							</svg>
-						</button>
-					</div>
+				<button
+					id="sent-btn"
+					title="Send Message"
+					@click=${this._sendMsg}
+					?disabled=${!this.ws}>
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 24 24">
+						<path d="M0 0h24v24H0V0z" fill="none"/>
+						<path d="M4.01 6.03l7.51 3.22-7.52-1 .01-2.22m7.5 8.72L4 17.97v-2.22l7.51-1M2.01 3L2 10l15 2-15 2 .01 7L23 12 2.01 3z"/>
+					</svg>
+				</button>
+			</div>
         </div>
     `
 	}
 
 	render () {
 		return html`
-      ${this.ui
-		? this._uiTemplate()
-		: html``}
-    `
+			${this.ui
+				? this._uiTemplate()
+				: html``}`
 	}
 }
 

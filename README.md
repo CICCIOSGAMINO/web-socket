@@ -4,7 +4,7 @@
 
 # 🍔 \<web-socket\>
 
-v6.3.0 - 23-06-2022
+v7.0.0 - 09-08-2023
 
 Simple debug WebSocket CustomElement 🍔! The component can be used with a simple UI or without it (ui attribute), you can connect and disconnect from your WebSocket server or set auto attribute to set an infinite connection loop.
 
@@ -23,10 +23,9 @@ When using the UI click the Connect button to connect to the WebSocket server, t
 ![Example web-socket component](https://raw.githubusercontent.com/CICCIOSGAMINO/cicciosgamino.github.io/master/images/exampleWebSocket.gif)
 
 ```html
+<!-- easy with user interface no autoconnection -->
 <web-socket url="ws://127.0.0.1:8888" ui></web-socket>
-```
 
-```html
 <!-- With auto connection (10sec) -->
 <web-socket url="ws://127.0.0.1:8888" ui auto></web-socket>
 
@@ -45,9 +44,7 @@ npm install --save @cicciosgamino/web-socket
 ```html
 <!-- Import Js Module -->
 <script type="module">
-  // Importing this module registers <progress-ring> as an element that you
-  // can use in this page.
-  //
+
   // Note this import is a bare module specifier, so it must be converted
   // to a path using a server such as @web/dev-server.
   import '@cicciosgamino/web-socket'
@@ -58,7 +55,8 @@ npm install --save @cicciosgamino/web-socket
 ```html
 <web-socket url="ws://127.0.0.1:8888" ui></web-socket>
 
-<!-- Place your element without url, set with Js before try to use ws> -->
+<!-- Place your element without url, set the url before click connect button -->
+<!-- or pass an active WebSocket with the passWebSocket method -->
 <web-socket></web-socket>
 ```
 
@@ -88,7 +86,6 @@ npm install --save @cicciosgamino/web-socket
       </web-socket>
     `
   }
-}
 ```
 
 5. Set the url attribute with
@@ -101,6 +98,17 @@ document.querySelector('#ws-element')
 // in lit element
 this.renderRoot.querySelector('#ws-element')
 			.setAttribute('url','ws://127.0.0.1:8888')
+
+// create your WebSocket object with Javascript
+const ws = new WebSocket('ws://127.0.0.1:8888')
+
+// Or get the WebSocket from the WebComponent
+const ws = this.renderRoot.querySelector('#ws-one')
+  .getWebSocket()
+
+// pass the WebSocket on other web-socket component
+this.renderRoot.querySelector('#ws-two')
+  .passWebSocket(ws)
 ```
 
 ## 🐝 API
@@ -110,7 +118,7 @@ this.renderRoot.querySelector('#ws-element')
 | Name | Type | Default | Description
 | ------------- | ------------- | ------------ | --------------
 | url       | String | `''` | WebSocket Server URL
-| protocols | String | `[]` | WebSocket Supported protocols
+| protocols | String | `[]` | WebSocket Supported protocols (TODO)
 | ui    | Boolean | `` | If Attribute defined is show easy UI
 | auto  | Boolean | `` | Attribute to set the auto connection mode
 
